@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LLVM IR Diff Viewer</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='diff2html.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <h1>LLVM IR Diff</h1>
+  <div id="diff"></div>
+
+  <script src="{{ url_for('static', filename='diff2html.min.js') }}"></script>
+  <script>
+    fetch("/generated/diff_output.txt")
+      .then(res => res.text())
+      .then(diff => {
+        const html = Diff2Html.html(diff, {
+          drawFileList: false,
+          matching: 'lines',
+          outputFormat: 'side-by-side'
+        });
+        document.getElementById("diff").innerHTML = html;
+      });
+  </script>
+</body>
+</html>
